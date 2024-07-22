@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -139,7 +140,6 @@ public class Bill extends javax.swing.JFrame {
                         String itemName = (String) model.getValueAt(row, 0);
                         String qty = (String) model.getValueAt(row, 1);
                         String price = (String) model.getValueAt(row, 2);
-
                         // Format line with right-aligned price
                         String line = String.format("%-30s %5s %10s", itemName, qty, String.format("%,.2f", Double.parseDouble(price)));
                         g2d.drawString(line, 100, y);
@@ -177,7 +177,7 @@ public class Bill extends javax.swing.JFrame {
         }
     }
 
-    private double calculateTotal() {
+  private double calculateTotal() {
         double total = 0.0;
 
         // Get the table model
@@ -196,6 +196,7 @@ public class Bill extends javax.swing.JFrame {
 
                 // Calculate subtotal for current row
                 double subtotal = qty * price;
+                model.setValueAt(subtotal, row, 3);
 
                 // Add subtotal to total
                 total += subtotal;
@@ -206,6 +207,7 @@ public class Bill extends javax.swing.JFrame {
 
         return total;
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -236,6 +238,7 @@ public class Bill extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         returnlabel = new javax.swing.JLabel();
+        unitBox = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         totallabel = new javax.swing.JLabel();
         addBtn = new javax.swing.JButton();
@@ -244,17 +247,18 @@ public class Bill extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         pricefield1 = new javax.swing.JTextField();
-        Kg = new java.awt.Choice();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 153));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 204, 204));
         jLabel1.setText("Bill No");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 70, 30));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(204, 204, 204));
         jLabel2.setText("Customer Name");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 120, 160, 30));
 
@@ -267,6 +271,7 @@ public class Bill extends javax.swing.JFrame {
         getContentPane().add(billnumberfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 210, 30));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(204, 204, 204));
         jLabel3.setText("Cash");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 320, -1, 30));
 
@@ -274,6 +279,7 @@ public class Bill extends javax.swing.JFrame {
         getContentPane().add(itemnamefield, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 260, 180, 30));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(204, 204, 204));
         jLabel4.setText("Rate");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 260, -1, 30));
 
@@ -287,10 +293,13 @@ public class Bill extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "Qty", "Price"
+                "Name", "Qty", "Rate Per Qty", "Total"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(3).setHeaderValue("Total");
+        }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 480, 740, 270));
 
@@ -314,6 +323,7 @@ public class Bill extends javax.swing.JFrame {
         getContentPane().add(itemqtyfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 260, 120, 30));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(204, 204, 204));
         jLabel6.setText("Item Quantity");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, -1, 30));
 
@@ -335,14 +345,20 @@ public class Bill extends javax.swing.JFrame {
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(204, 204, 204));
         jLabel10.setText("Item Name");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, -1, 30));
 
         returnlabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        returnlabel.setForeground(new java.awt.Color(204, 204, 204));
         returnlabel.setText("Return");
         getContentPane().add(returnlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 320, -1, 30));
 
+        unitBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "UNIT", "KG", "G", "COUNT" }));
+        getContentPane().add(unitBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 260, -1, -1));
+
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(204, 204, 204));
         jLabel12.setText("Total");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 370, -1, 30));
 
@@ -391,13 +407,6 @@ public class Bill extends javax.swing.JFrame {
         pricefield1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         getContentPane().add(pricefield1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 260, 130, 30));
 
-        Kg.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                KgComponentShown(evt);
-            }
-        });
-        getContentPane().add(Kg, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 260, 70, 40));
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -425,6 +434,26 @@ public class Bill extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.addRow(rowData);
 
+       double quantity = Double.parseDouble(itemqtyfield.getText());
+    
+    // Retrieve selected unit from JComboBox
+    String selectedUnit = (String) unitBox.getSelectedItem();
+    
+    // Define rates (you can fetch these from a database or set them as constants)
+    double ratePerGram = 0.05; // Example rate per gram
+    double ratePerKg = 50.0;   // Example rate per kilogram
+    
+    // Calculate total price based on unit selected
+    double totalPrice = 0.0;
+    if ("G".equals(selectedUnit)) {
+        totalPrice = quantity * ratePerGram;
+    } else if ("KG".equals(selectedUnit)) {
+        totalPrice = quantity * ratePerKg;
+    } else {
+        // Handle unexpected unit selection
+        System.err.println("Unexpected unit selected: " + selectedUnit);
+    }
+  
         double total = calculateTotal();
         System.out.println("Total Price: " + total);
         String returncash = cashfield.getText().toString().trim();
@@ -446,10 +475,6 @@ public class Bill extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_exitbtnActionPerformed
-
-    private void KgComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_KgComponentShown
-        // TODO add your handling code here:
-    }//GEN-LAST:event_KgComponentShown
 
     /**
      * @param args the command line arguments
@@ -487,7 +512,6 @@ public class Bill extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Choice Kg;
     private javax.swing.JButton addBtn;
     private javax.swing.JTextField billnumberfield;
     private javax.swing.JTextField cashfield;
@@ -516,5 +540,6 @@ public class Bill extends javax.swing.JFrame {
     private javax.swing.JLabel returnAmount;
     private javax.swing.JLabel returnlabel;
     private javax.swing.JLabel totallabel;
+    private javax.swing.JComboBox<String> unitBox;
     // End of variables declaration//GEN-END:variables
 }
