@@ -12,12 +12,18 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,122 +37,175 @@ public class Bill extends javax.swing.JFrame {
      * Creates new form Bill
      */
     public Bill() {
-         this.setUndecorated(true);
+        this.setUndecorated(false);
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
         billnumberfield.setEnabled(false);
-       billnumberfield.setText(String.valueOf(Math.abs(new Random().nextInt()) + 1));
+        billnumberfield.setText(String.valueOf(Math.abs(new Random().nextInt()) + 1));
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            GraphicsDevice gd = ge.getDefaultScreenDevice();
-            Rectangle screenBounds = gd.getDefaultConfiguration().getBounds();
-            
-            // Load image
-            URL imageURL = Bill.class.getResource("/images/back.png");
-            if (imageURL != null) {
-                ImageIcon icon = new ImageIcon(imageURL);
-                
-                // Scale the image to fit the JLabel size (which should be the frame size)
-                Image scaledImage = icon.getImage().getScaledInstance(screenBounds.width, screenBounds.height, Image.SCALE_SMOOTH);
-                jLabel5.setIcon(new ImageIcon(scaledImage));
-                
-                // Set layout to null to manually position and size the JLabel
-                jLabel5.setBounds(0, 0, screenBounds.width, screenBounds.height); // Set JLabel bounds to match frame
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        Rectangle screenBounds = gd.getDefaultConfiguration().getBounds();
 
-            } else {
-                System.err.println("Resource not found");
-            }
+        // Load image
+        URL imageURL = Bill.class.getResource("/images/back6.jpg");
+        if (imageURL != null) {
+            ImageIcon icon = new ImageIcon(imageURL);
+
+            // Scale the image to fit the JLabel size (which should be the frame size)
+            Image scaledImage = icon.getImage().getScaledInstance(screenBounds.width, screenBounds.height, Image.SCALE_SMOOTH);
+            jLabel5.setIcon(new ImageIcon(scaledImage));
+
+            // Set layout to null to manually position and size the JLabel
+            jLabel5.setBounds(0, 0, screenBounds.width, screenBounds.height); // Set JLabel bounds to match frame
+
+        } else {
+            System.err.println("Resource not found");
+        }
     }
-    
-    private void printTable() {
-    // Create a PrinterJob
-    PrinterJob printerJob = PrinterJob.getPrinterJob();
-    
-    // Set the Printable to be the JTable
-    printerJob.setPrintable(new Printable() {
-        @Override
-        public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-            // Get the table model.
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            
-            // Set the font and graphics context
-            Font font = graphics.getFont().deriveFont(Font.PLAIN, 12);
-            graphics.setFont(font);
-            
-            // Calculate the number of rows that fit on a page
-            int rowsPerPage = (int) (pageFormat.getImageableHeight() / graphics.getFontMetrics().getHeight());
-            int totalRows = model.getRowCount();
-            int startRow = pageIndex * rowsPerPage;
-            int endRow = Math.min(startRow + rowsPerPage, totalRows);
-            
-            // Print each row within the current page range
-            if (startRow < totalRows) {
-                Graphics2D g2d = (Graphics2D) graphics;
-                g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-                
-                int y = 100; // Initial y position
-                
-                for (int row = startRow; row < endRow; row++) {
-                    String iname = (String) model.getValueAt(row, 0); // Item name
-                    String price = (String) model.getValueAt(row, 1); // Price
-                    String qty = (String) model.getValueAt(row, 2); // Quantity
-                    
-                    // Format the text to be printed
-                    String line = String.format("%-30s %10s %10s", iname, qty, price);
-                    
-                    // Print the line
-                    graphics.drawString(line, 100, y);
-                    
-                    // Move to the next line
-                    y += graphics.getFontMetrics().getHeight();
+
+    public void printTable() {
+        PrinterJob printerJob = PrinterJob.getPrinterJob();
+        printerJob.setPrintable(new Printable() {
+            @Override
+            public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                Font font = graphics.getFont().deriveFont(Font.PLAIN, 12);
+                Font headerFont = font.deriveFont(Font.BOLD, 14);
+                int rowsPerPage = (int) (pageFormat.getImageableHeight() / graphics.getFontMetrics().getHeight());
+                int totalRows = model.getRowCount();
+                int startRow = pageIndex * rowsPerPage;
+                int endRow = Math.min(startRow + rowsPerPage, totalRows);
+
+                if (startRow < totalRows) {
+                    Graphics2D g2d = (Graphics2D) graphics;
+                    g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+
+                    // Print company information 
+                    g2d.setFont(font);
+                    g2d.drawString("VALLIENTO", 50, 20);
+                    g2d.drawString("Address Line 1", 50, 40);
+                    g2d.drawString("Phone: 123-456-7890", 50, 60);
+
+                    // Draw a line
+                    g2d.drawLine(50, 70, (int) pageFormat.getImageableWidth() - 50, 70);
+
+                    // Try loading logo
+                    try {
+                        BufferedImage logo = ImageIO.read(new File("D:\\CNTN\\src\\images\\back.jpeg"));
+
+                        // Calculate the aspect ratio of the original image
+                        double imageAspectRatio = (double) logo.getWidth() / (double) logo.getHeight();
+
+                        // Determine the new dimensions that fit within 150*70 while maintaining aspect ratio
+                        int newWidth;
+                        int newHeight;
+                        if (imageAspectRatio > 1) { // Wider than tall
+                            newWidth = 150;
+                            newHeight = (int) (newWidth / imageAspectRatio);
+                        } else { // Taller than wide or square
+                            newHeight = 70;
+                            newWidth = (int) (newHeight * imageAspectRatio);
+                        }
+
+                        // Get a resized version of the image with the new dimensions
+                        BufferedImage resizedLogo = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB); // Adjust type as needed
+                        Graphics2D g2dTemp = resizedLogo.createGraphics();
+                        g2dTemp.drawImage(logo.getSubimage(0, 0, logo.getWidth(), logo.getHeight()), 0, 0, newWidth, newHeight, null);
+                        g2dTemp.dispose();
+                        // Calculate x-coordinate for rightmost position
+                        int logoWidth = resizedLogo.getWidth();
+                        int pageWidth = (int) pageFormat.getImageableWidth();
+                        int logoX = pageWidth - logoWidth;
+
+                        // Draw the logo at the calculated position and top of the page (y-coordinate can be adjusted)
+                        g2d.drawImage(resizedLogo, logoX, 0, null);
+
+                    } catch (IOException ex) {
+                        // Handle logo loading error (optional: print a message)
+                    }
+
+                    // Print headers
+                    g2d.setFont(headerFont);
+                    String header = String.format("%-30s %5s %10s", "Item name", "qty", "Price");
+                    g2d.drawString(header, 100, 150);
+
+                    // Draw a line
+                    g2d.drawLine(50, 160, (int) pageFormat.getImageableWidth() - 50, 160);
+
+                    // Print bill items
+                    g2d.setFont(font);
+                    int y = 180;
+                    for (int row = startRow; row < endRow; row++) {
+                        String itemName = (String) model.getValueAt(row, 0);
+                        String qty = (String) model.getValueAt(row, 1);
+                        String price = (String) model.getValueAt(row, 2);
+
+                        // Format line with right-aligned price
+                        String line = String.format("%-30s %5s %10s", itemName, qty, String.format("%,.2f", Double.parseDouble(price)));
+                        g2d.drawString(line, 100, y);
+
+                        y += 20; // Adjust vertical spacing between items
+                    }
+
+                    // Print total (assuming a 'total' column exists)
+                    double total = calculateTotal();
+
+                    String totalStr = String.format("Total: %,.2f", total);
+                    g2d.drawString(totalStr, (int) pageFormat.getImageableWidth() - 200, y + 20);
+
+                    // Print date and time
+                    Date date = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String formattedDate = sdf.format(date);
+                    g2d.drawString("Printed on: " + formattedDate, 50, y + 40);
+
+                    return Printable.PAGE_EXISTS;
+                } else {
+                    return Printable.NO_SUCH_PAGE;
                 }
-                
-                return Printable.PAGE_EXISTS;
-            } else {
-                return Printable.NO_SUCH_PAGE;
+            }
+        });
+
+        // Show print dialog and print if user confirms
+        if (printerJob.printDialog()) {
+            try {
+                printerJob.print();
+            } catch (PrinterException ex) {
+                ex.printStackTrace();
+                // Handle printing error
             }
         }
-    });
-    
-    // Show print dialog and print if user confirms
-    if (printerJob.printDialog()) {
-        try {
-            printerJob.print();
-        } catch (PrinterException ex) {
-            ex.printStackTrace();
-            // Handle printing error
-        }
     }
-}
-    
-     private double calculateTotal() {
-    double total = 0.0;
-    
-    // Get the table model
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    
-    // Iterate through rows
-    for (int row = 0; row < model.getRowCount(); row++) {
-        // Get quantity and price from the table model
-        String qtyStr = (String) model.getValueAt(row, 2); // Assuming qty is in column index 2
-        String priceStr = (String) model.getValueAt(row, 1); // Assuming price is in column index 1
-        
-        // Parse quantity and price as double
-        try {
-            double qty = Double.parseDouble(qtyStr);
-            double price = Double.parseDouble(priceStr);
-            
-            // Calculate subtotal for current row
-            double subtotal = qty * price;
-            
-            // Add subtotal to total
-            total += subtotal;
-        } catch (NumberFormatException e) {
-            e.printStackTrace(); // Handle parsing errors
+
+    private double calculateTotal() {
+        double total = 0.0;
+
+        // Get the table model
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+        // Iterate through rows
+        for (int row = 0; row < model.getRowCount(); row++) {
+            // Get quantity and price from the table model
+            String qtyStr = (String) model.getValueAt(row, 2); // Assuming qty is in column index 2
+            String priceStr = (String) model.getValueAt(row, 1); // Assuming price is in column index 1
+
+            // Parse quantity and price as double
+            try {
+                double qty = Double.parseDouble(qtyStr);
+                double price = Double.parseDouble(priceStr);
+
+                // Calculate subtotal for current row
+                double subtotal = qty * price;
+
+                // Add subtotal to total
+                total += subtotal;
+            } catch (NumberFormatException e) {
+                e.printStackTrace(); // Handle parsing errors
+            }
         }
+
+        return total;
     }
-    
-    return total;
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -185,13 +244,15 @@ public class Bill extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         pricefield1 = new javax.swing.JTextField();
+        Kg = new java.awt.Choice();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 153, 153));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Bill No");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 60, 30));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 70, 30));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setText("Customer Name");
@@ -213,7 +274,7 @@ public class Bill extends javax.swing.JFrame {
         getContentPane().add(itemnamefield, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 260, 180, 30));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel4.setText("Price");
+        jLabel4.setText("Rate");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 260, -1, 30));
 
         returnAmount.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -231,7 +292,7 @@ public class Bill extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 480, 740, 420));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 480, 740, 270));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -254,7 +315,7 @@ public class Bill extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setText("Item Quantity");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 260, -1, 30));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, -1, 30));
 
         cashfield.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         getContentPane().add(cashfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 320, 130, 30));
@@ -292,14 +353,14 @@ public class Bill extends javax.swing.JFrame {
 
         addBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         addBtn.setForeground(new java.awt.Color(0, 204, 204));
-        addBtn.setText("Add");
+        addBtn.setText("ADD");
         addBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         addBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(addBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 560, 80, 40));
+        getContentPane().add(addBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 390, 80, 40));
 
         printbtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         printbtn.setForeground(new java.awt.Color(0, 204, 204));
@@ -310,28 +371,32 @@ public class Bill extends javax.swing.JFrame {
                 printbtnActionPerformed(evt);
             }
         });
-        getContentPane().add(printbtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 620, 80, 40));
+        getContentPane().add(printbtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 620, 80, 40));
 
         exitbtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         exitbtn.setForeground(new java.awt.Color(255, 0, 0));
-        exitbtn.setText("Exit");
+        exitbtn.setText("EXIT");
         exitbtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         exitbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitbtnActionPerformed(evt);
             }
         });
-        getContentPane().add(exitbtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 680, 80, 40));
-
-        jLabel5.setText("jLabel5");
+        getContentPane().add(exitbtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 620, 90, 40));
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel11.setText("Price");
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 260, -1, 30));
 
         pricefield1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         getContentPane().add(pricefield1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 260, 130, 30));
+
+        Kg.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                KgComponentShown(evt);
+            }
+        });
+        getContentPane().add(Kg, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 260, 70, 40));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -353,11 +418,11 @@ public class Bill extends javax.swing.JFrame {
         String cut_name = customernamefield.getText().toString().trim();
         String billno = billnumberfield.getText().toString().trim();
 
-        String iname =itemnamefield.getText().toString().trim();
+        String iname = itemnamefield.getText().toString().trim();
         String price = pricefield1.getText().toString().trim();
-        String qty =  itemqtyfield.getText().toString().trim();
+        String qty = itemqtyfield.getText().toString().trim();
         Object[] rowData = {iname, price, qty};
-        DefaultTableModel  model = (DefaultTableModel)jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.addRow(rowData);
 
         double total = calculateTotal();
@@ -381,6 +446,10 @@ public class Bill extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_exitbtnActionPerformed
+
+    private void KgComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_KgComponentShown
+        // TODO add your handling code here:
+    }//GEN-LAST:event_KgComponentShown
 
     /**
      * @param args the command line arguments
@@ -418,6 +487,7 @@ public class Bill extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.Choice Kg;
     private javax.swing.JButton addBtn;
     private javax.swing.JTextField billnumberfield;
     private javax.swing.JTextField cashfield;
