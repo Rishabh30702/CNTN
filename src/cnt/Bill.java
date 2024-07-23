@@ -48,7 +48,7 @@ public class Bill extends javax.swing.JFrame {
         Rectangle screenBounds = gd.getDefaultConfiguration().getBounds();
 
         // Load image
-        URL imageURL = Bill.class.getResource("/images/back6.jpg");
+        URL imageURL = Bill.class.getResource("/images/back6.png");
         if (imageURL != null) {
             ImageIcon icon = new ImageIcon(imageURL);
 
@@ -255,12 +255,12 @@ public class Bill extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(204, 204, 204));
         jLabel1.setText("Bill No");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 70, 30));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 70, 30));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(204, 204, 204));
         jLabel2.setText("Customer Name");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 120, 160, 30));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 60, 160, 30));
 
         billnumberfield.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         billnumberfield.addActionListener(new java.awt.event.ActionListener() {
@@ -268,25 +268,25 @@ public class Bill extends javax.swing.JFrame {
                 billnumberfieldActionPerformed(evt);
             }
         });
-        getContentPane().add(billnumberfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 210, 30));
+        getContentPane().add(billnumberfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 210, 30));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(204, 204, 204));
         jLabel3.setText("Cash");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 320, -1, 30));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, -1, 30));
 
         itemnamefield.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        getContentPane().add(itemnamefield, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 260, 180, 30));
+        getContentPane().add(itemnamefield, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, 180, 30));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(204, 204, 204));
         jLabel4.setText("Rate");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 260, -1, 30));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 180, -1, 30));
 
         returnAmount.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         returnAmount.setForeground(new java.awt.Color(255, 51, 51));
         returnAmount.setText("0.0");
-        getContentPane().add(returnAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 320, 30, 30));
+        getContentPane().add(returnAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 230, 120, 30));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -301,18 +301,18 @@ public class Bill extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(3).setHeaderValue("Total");
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 480, 740, 270));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 420, 770, 220));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Summary");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 440, -1, -1));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 1280, 10));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 380, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 1280, 40));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Customer Details");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, -1, -1));
 
         itemqtyfield.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         itemqtyfield.addActionListener(new java.awt.event.ActionListener() {
@@ -320,15 +320,20 @@ public class Bill extends javax.swing.JFrame {
                 itemqtyfieldActionPerformed(evt);
             }
         });
-        getContentPane().add(itemqtyfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 260, 120, 30));
+        getContentPane().add(itemqtyfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 180, 120, 30));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(204, 204, 204));
         jLabel6.setText("Item Quantity");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, -1, 30));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 180, -1, 30));
 
         cashfield.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        getContentPane().add(cashfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 320, 130, 30));
+        cashfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cashfieldActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cashfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 230, 130, 30));
 
         customernamefield.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         customernamefield.addActionListener(new java.awt.event.ActionListener() {
@@ -336,36 +341,41 @@ public class Bill extends javax.swing.JFrame {
                 customernamefieldActionPerformed(evt);
             }
         });
-        getContentPane().add(customernamefield, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 120, 210, 30));
-        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 1280, 10));
+        getContentPane().add(customernamefield, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 60, 210, 30));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 1280, 50));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Item Details");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 120, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(204, 204, 204));
         jLabel10.setText("Item Name");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 260, -1, 30));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, -1, 30));
 
         returnlabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         returnlabel.setForeground(new java.awt.Color(204, 204, 204));
         returnlabel.setText("Return");
-        getContentPane().add(returnlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 320, -1, 30));
+        getContentPane().add(returnlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 230, -1, 30));
 
         unitBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "UNIT", "KG", "G", "COUNT" }));
-        getContentPane().add(unitBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 260, -1, -1));
+        unitBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                unitBoxActionPerformed(evt);
+            }
+        });
+        getContentPane().add(unitBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 180, -1, 30));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(204, 204, 204));
         jLabel12.setText("Total");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 370, -1, 30));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 280, -1, 30));
 
         totallabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         totallabel.setForeground(new java.awt.Color(255, 51, 51));
         totallabel.setText("0.0");
-        getContentPane().add(totallabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 380, -1, -1));
+        getContentPane().add(totallabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 280, 130, 30));
 
         addBtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         addBtn.setForeground(new java.awt.Color(0, 204, 204));
@@ -376,7 +386,7 @@ public class Bill extends javax.swing.JFrame {
                 addBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(addBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 390, 80, 40));
+        getContentPane().add(addBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 310, 120, 40));
 
         printbtn.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         printbtn.setForeground(new java.awt.Color(0, 204, 204));
@@ -387,7 +397,7 @@ public class Bill extends javax.swing.JFrame {
                 printbtnActionPerformed(evt);
             }
         });
-        getContentPane().add(printbtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 620, 80, 40));
+        getContentPane().add(printbtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 510, 110, 40));
 
         exitbtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         exitbtn.setForeground(new java.awt.Color(255, 0, 0));
@@ -398,14 +408,19 @@ public class Bill extends javax.swing.JFrame {
                 exitbtnActionPerformed(evt);
             }
         });
-        getContentPane().add(exitbtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 620, 90, 40));
+        getContentPane().add(exitbtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 580, 110, 40));
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 260, -1, 30));
 
         pricefield1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        getContentPane().add(pricefield1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 260, 130, 30));
+        pricefield1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pricefield1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(pricefield1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 180, 130, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -475,6 +490,18 @@ public class Bill extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_exitbtnActionPerformed
+
+    private void cashfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cashfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cashfieldActionPerformed
+
+    private void unitBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unitBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_unitBoxActionPerformed
+
+    private void pricefield1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pricefield1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pricefield1ActionPerformed
 
     /**
      * @param args the command line arguments
